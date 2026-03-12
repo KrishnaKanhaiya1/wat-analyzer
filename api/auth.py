@@ -8,7 +8,10 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from .config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# rounds=4 is intentional: default (12) takes ~13s on this hardware which
+# consumes the entire 60-second frontend timeout before /sessions/start even runs.
+# 4 rounds = ~0.03s, still hashes with bcrypt. Increase for production.
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__rounds=4)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
