@@ -30,7 +30,7 @@ def load_models():
     try:
         from transformers import pipeline
         from sentence_transformers import SentenceTransformer
-        from .config import settings
+        from ..config import settings
         
         logger.info("Loading sentiment model...")
         _sentiment_pipeline = pipeline(
