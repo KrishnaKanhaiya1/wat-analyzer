@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
 
 const TRAIT_COLORS = {
   positivity: '#22c55e',
@@ -52,33 +50,8 @@ export default function PassportPage() {
   });
   const radarPath = radarPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ') + 'Z';
 
-  const [downloading, setDownloading] = useState(false);
-
   const handlePrint = () => {
     window.print();
-  };
-
-  const handleDownloadPdf = async () => {
-    setDownloading(true);
-    try {
-      const element = document.getElementById('passport-content');
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#09090b', // match surface-950
-      });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`WAT_Passport_${data.user?.username || 'user'}_${new Date().toISOString().split('T')[0]}.pdf`);
-    } catch (err) {
-      console.error('Error generating PDF:', err);
-      window.print(); // Fallback
-    } finally {
-      setDownloading(false);
-    }
   };
 
   return (
@@ -88,18 +61,13 @@ export default function PassportPage() {
           <h1 className="font-display text-3xl font-bold mb-2">🎫 Personal Soft-Skill Passport</h1>
           <p className="text-white/50">Your unified profile across all WAT modules.</p>
         </div>
-        <div className="flex gap-3 print:hidden">
-          <button onClick={handlePrint} className="btn-ghost">
-            🖨️ Print
-          </button>
-          <button onClick={handleDownloadPdf} disabled={downloading} className="btn-secondary whitespace-nowrap">
-            {downloading ? '⏳ Generating...' : '📄 Download PDF'}
-          </button>
-        </div>
+        <button onClick={handlePrint} className="btn-secondary print:hidden">
+          🖨️ Print / Save PDF
+        </button>
       </div>
 
       {/* Profile Card */}
-      <div className="glass-card p-8 mb-8 animate-slide-up" style={{animationDelay: '0.1s'}}>
+      <div className="glass-card p-8 mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Radar Chart */}
           <div className="flex justify-center">
@@ -168,7 +136,7 @@ export default function PassportPage() {
 
       {/* Strengths & Growth */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="glass-card p-6 animate-slide-up" style={{animationDelay: '0.2s'}}>
+        <div className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
           <h3 className="font-display font-semibold text-lg mb-4 text-emerald-400">💪 Top Strengths</h3>
           <div className="space-y-3">
             {data.strengths?.map((s, i) => (
@@ -185,7 +153,7 @@ export default function PassportPage() {
           </div>
         </div>
 
-        <div className="glass-card p-6 animate-slide-up" style={{animationDelay: '0.3s'}}>
+        <div className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
           <h3 className="font-display font-semibold text-lg mb-4 text-amber-400">🌱 Growth Areas</h3>
           <div className="space-y-3">
             {data.growth_areas?.map((s, i) => (
@@ -204,7 +172,7 @@ export default function PassportPage() {
       </div>
 
       {/* Recommendations */}
-      <div className="glass-card p-6 mb-8 animate-slide-up" style={{animationDelay: '0.4s'}}>
+      <div className="glass-card p-6 mb-8 animate-slide-up" style={{ animationDelay: '0.4s' }}>
         <h3 className="font-display font-semibold text-lg mb-4">🎯 Recommended Next Steps</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="p-4 rounded-xl bg-primary-500/10 border border-primary-500/20">
@@ -221,7 +189,7 @@ export default function PassportPage() {
       </div>
 
       {/* All Trait Scores */}
-      <div className="glass-card p-6 animate-slide-up" style={{animationDelay: '0.5s'}}>
+      <div className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.5s' }}>
         <h3 className="font-display font-semibold text-lg mb-4">📊 Full Trait Breakdown</h3>
         <div className="space-y-3">
           {Object.entries(traits).sort((a, b) => b[1] - a[1]).map(([key, value]) => (

@@ -172,4 +172,11 @@ SEED_PROMPTS = {
         {"word": "Empowerment", "themes": ["leadership", "trust"], "difficulty": 1},
         {"word": "Efficiency", "themes": ["discipline", "strategy"], "difficulty": 1},
     ],
+    "scenario": [
+        {"word": "[Angry Client] 'We just lost $10,000 because of your software bug. What are you going to do about it?'", "themes": ["emotional_stability", "empathy", "responsibility"], "difficulty": 3},
+        {"word": "[Manager] 'I'm very disappointed in your recent performance. You missed three deadlines this week.'", "themes": ["resilience", "accountability"], "difficulty": 3},
+        {"word": "[Colleague] 'Why did you steal credit for my idea in that meeting?'", "themes": ["conflict", "integrity", "clarity"], "difficulty": 3},
+        {"word": "[Interviewer] 'Explain why you were fired from your last job.'", "themes": ["honesty", "resilience", "positivity"], "difficulty": 3},
+        {"word": "[Customer] 'I have been on hold for two hours! Your service is absolute garbage.'", "themes": ["empathy", "emotional_stability"], "difficulty": 2},
+    ]
 }

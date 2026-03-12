@@ -44,6 +44,16 @@ const MODULE_CONFIG = {
     timer: 20,
     count: 12,
   },
+  scenario: {
+    title: 'Interactive Roleplay Simulator',
+    subtitle: 'Voice-Activated Stress Scenarios',
+    icon: '🎭',
+    gradient: 'from-rose-600 to-red-600',
+    shadow: 'shadow-rose-500/20',
+    description: 'Talk to an AI agent in realistic high-pressure situations. Tracks voice, pacing, fillers, and facial composure.',
+    timer: 60,
+    count: 3,
+  }
 };
 
 export default function HomePage() {
@@ -141,7 +151,7 @@ function ModuleCard({ moduleKey, config, index }) {
     <div
       className={`glass-card-hover p-8 cursor-pointer group animate-slide-up`}
       style={{ animationDelay: `${index * 0.1}s` }}
-      onClick={() => navigate(`/test/${moduleKey}`)}
+      onClick={() => navigate(moduleKey === 'scenario' ? '/scenario' : `/test/${moduleKey}`)}
     >
       <div className="flex items-start gap-5">
         <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${config.gradient} flex items-center justify-center text-3xl shrink-0 group-hover:scale-110 transition-transform duration-300 ${config.shadow} shadow-lg`}>

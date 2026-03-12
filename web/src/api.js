@@ -1,4 +1,12 @@
-const API_BASE = '/api';
+// API base:
+// - In Vite dev, ALWAYS use relative `/api` so the dev server proxy works.
+// - In builds (Docker/production), prefer `VITE_API_URL` if provided.
+let API_BASE = '/api';
+if (typeof import.meta !== 'undefined' && import.meta.env) {
+  if (!import.meta.env.DEV && import.meta.env.VITE_API_URL) {
+    API_BASE = import.meta.env.VITE_API_URL;
+  }
+}
 
 function getHeaders() {
   const token = localStorage.getItem('wat_token');
@@ -32,7 +40,13 @@ export const api = {
   getMe: () => request('/auth/me'),
 
   // Sessions
-  startSession: (data) => request('/sessions/start', { method: 'POST', body: JSON.stringify(data) }),
+  // `extraOptions` lets callers pass things like AbortController signal.
+  startSession: (data, extraOptions = {}) =>
+    request('/sessions/start', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      ...extraOptions,
+    }),
   submitSession: (sessionId, data) => request(`/sessions/${sessionId}/submit`, { method: 'POST', body: JSON.stringify(data) }),
   getSessionResults: (sessionId) => request(`/sessions/${sessionId}/results`),
   listSessions: (module) => request(`/sessions${module ? `?module=${module}` : ''}`),

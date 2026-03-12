@@ -49,7 +49,9 @@ services:
       - ./web:/app
       - /app/node_modules
     environment:
-      - VITE_API_URL=http://api:8000
+      # Expose full API base (including /api) so the frontend
+      # can talk to the backend correctly from inside Docker.
+      - VITE_API_URL=http://api:8000/api
 
 volumes:
   postgres_data:

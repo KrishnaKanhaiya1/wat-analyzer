@@ -225,6 +225,39 @@ function ResponseCard({ response, index, expanded, onToggle, highlights, onRewri
           {/* Trait scores for this response */}
           <TraitBars traits={response.trait_scores} />
           
+          {/* Multi-modal metrics */}
+          {(response.wpm > 0 || response.filler_count > 0 || response.composure_score > 0) && (
+            <div className="flex flex-wrap gap-4 p-4 rounded-xl bg-surface-800/50 border border-white/5">
+              {response.wpm > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🎙️</span>
+                  <div>
+                    <div className="text-xs text-white/50">Speech Pace</div>
+                    <div className="font-mono text-sm">{Math.round(response.wpm)} WPM</div>
+                  </div>
+                </div>
+              )}
+              {response.filler_count !== null && (
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">⚠️</span>
+                  <div>
+                    <div className="text-xs text-white/50">Filler Words</div>
+                    <div className="font-mono text-sm text-amber-400">{response.filler_count}</div>
+                  </div>
+                </div>
+              )}
+              {response.composure_score !== null && (
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">👤</span>
+                  <div>
+                    <div className="text-xs text-white/50">Facial Composure</div>
+                    <div className="font-mono text-sm text-emerald-400">{Math.round(response.composure_score * 100)}%</div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          
           {/* Token highlights */}
           {highlights?.token_highlights && (
             <div>

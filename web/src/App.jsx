@@ -9,6 +9,9 @@ import ResultsPage from './pages/ResultsPage';
 import TimelinePage from './pages/TimelinePage';
 import PassportPage from './pages/PassportPage';
 import SessionsPage from './pages/SessionsPage';
+import AdminPage from './pages/AdminPage';
+import ScenarioPage from './pages/ScenarioPage';
+import { useTranslation } from 'react-i18next';
 
 // Auth Context
 const AuthContext = createContext(null);
@@ -53,6 +56,8 @@ function App() {
           <Route path="/sessions" element={user ? <SessionsPage /> : <Navigate to="/login" />} />
           <Route path="/timeline" element={user ? <TimelinePage /> : <Navigate to="/login" />} />
           <Route path="/passport" element={user ? <PassportPage /> : <Navigate to="/login" />} />
+          <Route path="/admin" element={user ? <AdminPage /> : <Navigate to="/login" />} />
+          <Route path="/scenario" element={user ? <ScenarioPage /> : <Navigate to="/login" />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
@@ -64,12 +69,20 @@ function NavBar() {
   const { user, logout } = useAuth();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { t, i18n } = useTranslation();
+  
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'hi' : 'en';
+    i18n.changeLanguage(newLang);
+  };
   
   const links = [
     { to: '/', label: 'Home', icon: '🏠' },
     { to: '/sessions', label: 'Sessions', icon: '📋' },
     { to: '/timeline', label: 'Timeline', icon: '📈' },
     { to: '/passport', label: 'Passport', icon: '🎫' },
+    { to: '/scenario', label: 'Roleplay', icon: '🎭' },
+    { to: '/admin', label: 'Admin', icon: '⚙️' },
   ];
 
   return (
@@ -77,8 +90,8 @@ function NavBar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-lg font-bold">W</div>
-            <span className="font-display font-bold text-lg hidden sm:block">WAT Analyzer</span>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-lg font-bold text-white">W</div>
+            <span className="font-display font-bold text-lg hidden sm:block">{t('app.name')}</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
@@ -90,6 +103,9 @@ function NavBar() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button onClick={toggleLanguage} className="btn-ghost text-sm font-medium mr-2">
+              {i18n.language === 'en' ? 'हिंदी' : 'EN'}
+            </button>
             <span className="text-sm text-white/50 hidden sm:block">Hi, {user?.username}</span>
             <button onClick={logout} className="btn-ghost text-sm">Logout</button>
             <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden btn-ghost p-2">
@@ -117,8 +133,8 @@ function LoadingScreen() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface-950">
       <div className="text-center">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 animate-pulse flex items-center justify-center text-2xl font-bold">W</div>
-        <p className="text-white/50 animate-pulse">Loading WAT Analyzer...</p>
+        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 animate-pulse flex items-center justify-center text-2xl font-bold text-white">W</div>
+        <p className="text-white/50 animate-pulse">Loading WAT Analyzer Pro...</p>
       </div>
     </div>
   );
