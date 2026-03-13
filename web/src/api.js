@@ -37,6 +37,7 @@ export const api = {
   // Auth
   register: (data) => request('/auth/register', { method: 'POST', body: JSON.stringify(data) }),
   login: (data) => request('/auth/login', { method: 'POST', body: JSON.stringify(data) }),
+  demo: () => request('/auth/demo', { method: 'POST' }),
   getMe: () => request('/auth/me'),
 
   // Sessions

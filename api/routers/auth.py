@@ -58,6 +58,26 @@ def login(data: UserLogin, db: DBSession = Depends(get_db)):
     token = create_access_token({"sub": user.id})
     return TokenResponse(access_token=token, user_id=user.id, username=user.username)
 
+@router.post("/demo", response_model=TokenResponse)
+def demo_login(db: DBSession = Depends(get_db)):
+    """1-click demo login for hackathons/evaluators"""
+    demo_user = db.query(User).filter(User.username == 'demo_guest').first()
+    if not demo_user:
+        # Create the guest user if they don't exist
+        demo_user = User(
+            id=gen_uuid(),
+            username='demo_guest',
+            email='demo@wat-analyzer.local',
+            hashed_password=get_password_hash('demopass123!'),
+            full_name='Demo Judge',
+        )
+        db.add(demo_user)
+        db.commit()
+        db.refresh(demo_user)
+        
+    token = create_access_token({"sub": demo_user.id})
+    return TokenResponse(access_token=token, user_id=demo_user.id, username=demo_user.username)
+
 @router.get("/me", response_model=UserOut)
 def get_me(user: User = Depends(get_current_user)):
     return user
